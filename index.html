@@ -1,76 +1,46 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
+  <title>Белла — память</title>
 
-  <title>Белла</title>
-
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css"/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-  <header class="hero">
+<header class="hero">
+  <h1>Белла</h1>
+  <p class="subtitle">british shorthair • blue point</p>
+  <p class="tagline">любимая • смешная • навсегда дома</p>
+</header>
 
-    <h1>Белла</h1>
+<nav class="nav">
+  <a href="#photos">Фото</a>
+  <a href="#videos">Видео</a>
+</nav>
 
-    <p class="subtitle">
-      британская короткошерстная blue point
-    </p>
+<main class="container">
 
-    <p class="memory">
-      любимая • смешная • навсегда дома
-    </p>
+  <section id="photos">
+    <h2>Фото</h2>
+    <div id="photoAlbums"></div>
+  </section>
 
-  </header>
+  <section id="videos">
+    <h2>Видео</h2>
+    <div id="videoAlbums"></div>
+  </section>
 
-  <nav class="top-nav">
+</main>
 
-    <a href="#photos-section">Фото</a>
-
-    <a href="#videos-section">Видео</a>
-
-    <a href="#album-kitty">Котёнок</a>
-
-    <a href="#album-terrorist">Террористка</a>
-
-    <a href="#album-hungry">Голодная</a>
-
-  </nav>
-
-  <main class="container">
-
-    <section id="photos-section">
-
-      <h2>Фото</h2>
-
-      <div id="photos"></div>
-
-    </section>
-
-    <section id="videos-section">
-
-      <h2>Видео</h2>
-
-      <div id="videos"></div>
-
-    </section>
-
-  </main>
-
-  <script src="script.js"></script>
-
+<script src="script.js"></script>
 </body>
-
 </html>

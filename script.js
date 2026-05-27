@@ -1,263 +1,177 @@
-const photoAlbums = {
+// --------------------
+// PHOTO DATA
+// --------------------
 
+const photoAlbums = {
   "Подружки": {
-    id: "album-girlfriends",
     folder: "photos/girlfriends",
-    files: [
-      "g1.jpg","g2.jpg","g3.jpg","g4.jpg","g5.jpg"
-    ]
+    files: ["g1.jpg","g2.jpg","g3.jpg","g4.jpg","g5.jpg"]
   },
 
-  "Мелкая": {
-    id: "album-kitty",
+  "Котёнок": {
     folder: "photos/kitty",
-    files: [
-      "k1.jpg","k2.jpg","k3.jpg","k4.jpg",
-      "k5.jpg","k6.jpg","k7.jpg","k8.jpg",
-      "k9.jpg","k10.jpg","k11.jpg","k12.jpg"
-    ]
+    files: ["k1.jpg","k2.jpg","k3.jpg","k4.jpg","k5.jpg","k6.jpg","k7.jpg","k8.jpg","k9.jpg","k10.jpg","k11.jpg","k12.jpg"]
   },
 
   "Сурикат": {
-    id: "album-meerkat",
     folder: "photos/meerkat",
-    files: [
-      "m1.jpg","m2.jpg","m3.jpg"
-    ]
+    files: ["m1.jpg","m2.jpg","m3.jpg"]
   },
 
   "Игрушки": {
-    id: "album-plaything",
     folder: "photos/plaything",
-    files: [
-      "p1.jpg","p2.jpg","p3.jpg","p4.jpg",
-      "p5.jpg","p6.jpg","p7.jpg"
-    ]
+    files: ["p1.jpg","p2.jpg","p3.jpg","p4.jpg","p5.jpg","p6.jpg","p7.jpg"]
   },
 
   "Террористка": {
-    id: "album-terrorist",
     folder: "photos/terrorist",
-    files: [
-      "t1.jpg","t2.jpg","t3.jpg","t4.jpg",
-      "t5.jpg","t6.jpg","t7.jpg","t8.jpg",
-      "t9.jpg","t10.jpg","t11.jpg","t12.jpg",
-      "t13.jpg","t14.jpg","t15.jpg","t16.jpg",
-      "t17.jpg","t18.jpg","t20.jpg"
-    ]
+    files: ["t1.jpg","t2.jpg","t3.jpg","t4.jpg","t5.jpg","t6.jpg","t7.jpg","t8.jpg","t9.jpg","t10.jpg","t11.jpg","t12.jpg","t13.jpg","t14.jpg","t15.jpg","t16.jpg","t17.jpg","t18.jpg","t20.jpg"]
   }
 };
+
+// --------------------
+// VIDEO DATA
+// --------------------
 
 const videoAlbums = {
-
-  "Голодаю я": {
-    id: "album-hungry",
+  "Голодная": {
     folder: "videos/hungry",
-    files: [
-      "h1.mp4","h2.mp4","h3.mp4","h4.mp4",
-      "h5.mp4","h6.mp4","h7.mp4","h8.mp4",
-      "h9.mp4","h10.mp4","h11.mp4","h12.mp4",
-      "h13.mp4","h14.mp4","h15.mp4","h16.mp4",
-      "h17.mp4"
-    ]
+    files: Array.from({length: 17}, (_,i)=>`h${i+1}.mp4`)
   },
 
-  "Белла Куклачёва": {
-    id: "album-kuklacheva",
+  "Куклачёва": {
     folder: "videos/kuklacheva",
-    files: [
-      "k1.mp4","k2.mp4","k3.mp4","k4.mp4"
-    ]
+    files: ["k1.mp4","k2.mp4","k3.mp4","k4.mp4"]
   },
 
-  "Валяемся": {
-    id: "album-lie",
+  "Лежит": {
     folder: "videos/lie",
-    files: [
-      "l1.mp4","l2.mp4","l3.mp4","l4.mp4",
-      "l5.mp4","l6.mp4","l7.mp4","l8.mp4",
-      "l9.mp4","l10.mp4","l11.mp4","l12.mp4",
-      "l13.mp4","l14.mp4","l15.mp4","l16.mp4",
-      "l17.mp4","l18.mp4","l19.mp4","l20.mp4",
-      "l21.mp4","l22.mp4","l23.mp4","l24.mp4",
-      "l25.mp4","l26.mp4"
-    ]
+    files: Array.from({length: 26}, (_,i)=>`l${i+1}.mp4`)
   }
 };
 
-const photosContainer = document.getElementById("photos");
-const videosContainer = document.getElementById("videos");
+// --------------------
+// RENDER PHOTOS
+// --------------------
 
-for (const albumName in photoAlbums) {
+const photoRoot = document.getElementById("photoAlbums");
+const videoRoot = document.getElementById("videoAlbums");
 
-  const album = photoAlbums[albumName];
+for (const name in photoAlbums) {
+  const album = photoAlbums[name];
 
-  const imageList = album.files.map(
-    file => `${album.folder}/${file}`
-  );
+  const images = album.files.map(f => `${album.folder}/${f}`);
 
-  const section = document.createElement("div");
+  const div = document.createElement("div");
+  div.className = "album";
 
-  section.className = "album";
-
-  section.id = album.id;
-
-  section.innerHTML = `
-    <h3>${albumName}</h3>
-    <div class="gallery"></div>
+  div.innerHTML = `
+    <div class="album-title">${name}</div>
+    <div class="count">${images.length} фото</div>
+    <div class="grid"></div>
   `;
 
-  const gallery = section.querySelector(".gallery");
+  const grid = div.querySelector(".grid");
 
-  imageList.forEach((src, index) => {
-
+  images.forEach((src, index) => {
     const img = document.createElement("img");
-
     img.src = src;
 
-    img.loading = "lazy";
+    img.onclick = () => openLightbox(images, index);
 
-    img.addEventListener("click", () => {
-      openLightbox(imageList, index);
-    });
-
-    gallery.appendChild(img);
+    grid.appendChild(img);
   });
 
-  photosContainer.appendChild(section);
+  photoRoot.appendChild(div);
 }
 
-for (const albumName in videoAlbums) {
+// --------------------
+// RENDER VIDEOS (lazy)
+// --------------------
 
-  const album = videoAlbums[albumName];
+for (const name in videoAlbums) {
+  const album = videoAlbums[name];
 
-  const section = document.createElement("div");
+  const div = document.createElement("div");
+  div.className = "album";
 
-  section.className = "album";
-
-  section.id = album.id;
-
-  section.innerHTML = `
-    <h3>${albumName}</h3>
-    <div class="video-grid"></div>
+  div.innerHTML = `
+    <div class="album-title">${name}</div>
+    <div class="count">${album.files.length} видео</div>
+    <div class="grid"></div>
   `;
 
-  const grid = section.querySelector(".video-grid");
+  const grid = div.querySelector(".grid");
 
   album.files.forEach(file => {
-
     const video = document.createElement("video");
-
     video.controls = true;
-
-    video.preload = "metadata";
-
+    video.preload = "none"; // 🔥 важно для скорости
     video.src = `${album.folder}/${file}`;
 
     grid.appendChild(video);
   });
 
-  videosContainer.appendChild(section);
+  videoRoot.appendChild(div);
 }
 
-let currentImages = [];
+// --------------------
+// LIGHTBOX
+// --------------------
 
-let currentIndex = 0;
+let current = [];
+let index = 0;
 
-function openLightbox(images, index) {
-
-  currentImages = images;
-
-  currentIndex = index;
-
+function openLightbox(images, i) {
+  current = images;
+  index = i;
   renderLightbox();
 }
 
 function renderLightbox() {
+  document.querySelector(".lightbox")?.remove();
 
-  const old = document.querySelector(".lightbox");
+  const lb = document.createElement("div");
+  lb.className = "lightbox";
 
-  if (old) old.remove();
-
-  const lightbox = document.createElement("div");
-
-  lightbox.className = "lightbox";
-
-  lightbox.innerHTML = `
-    <button class="nav prev">←</button>
-
-    <img src="${currentImages[currentIndex]}">
-
-    <button class="nav next">→</button>
+  lb.innerHTML = `
+    <button class="arrow left">‹</button>
+    <img src="${current[index]}"/>
+    <button class="arrow right">›</button>
   `;
 
-  document.body.appendChild(lightbox);
+  lb.onclick = () => lb.remove();
 
-  lightbox
-    .querySelector(".prev")
-    .addEventListener("click", (e) => {
+  lb.querySelector(".left").onclick = (e) => {
+    e.stopPropagation();
+    index = (index - 1 + current.length) % current.length;
+    renderLightbox();
+  };
 
-      e.stopPropagation();
+  lb.querySelector(".right").onclick = (e) => {
+    e.stopPropagation();
+    index = (index + 1) % current.length;
+    renderLightbox();
+  };
 
-      currentIndex--;
-
-      if (currentIndex < 0) {
-        currentIndex = currentImages.length - 1;
-      }
-
-      renderLightbox();
-    });
-
-  lightbox
-    .querySelector(".next")
-    .addEventListener("click", (e) => {
-
-      e.stopPropagation();
-
-      currentIndex++;
-
-      if (currentIndex >= currentImages.length) {
-        currentIndex = 0;
-      }
-
-      renderLightbox();
-    });
-
-  lightbox.addEventListener("click", () => {
-    lightbox.remove();
-  });
+  document.body.appendChild(lb);
 }
 
-document.addEventListener("keydown", (e) => {
-
+// keyboard navigation
+document.addEventListener("keydown", e => {
   if (!document.querySelector(".lightbox")) return;
 
-  if (e.key === "ArrowRight") {
-
-    currentIndex++;
-
-    if (currentIndex >= currentImages.length) {
-      currentIndex = 0;
-    }
-
+  if (e.key === "ArrowLeft") {
+    index = (index - 1 + current.length) % current.length;
     renderLightbox();
   }
 
-  if (e.key === "ArrowLeft") {
-
-    currentIndex--;
-
-    if (currentIndex < 0) {
-      currentIndex = currentImages.length - 1;
-    }
-
+  if (e.key === "ArrowRight") {
+    index = (index + 1) % current.length;
     renderLightbox();
   }
 
   if (e.key === "Escape") {
-
-    document
-      .querySelector(".lightbox")
-      ?.remove();
+    document.querySelector(".lightbox")?.remove();
   }
 });
