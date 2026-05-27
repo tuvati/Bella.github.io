@@ -8,7 +8,7 @@ const photoAlbums = {
     files: ["g1.jpg","g2.jpg","g3.jpg","g4.jpg","g5.jpg"]
   },
 
-  "Котёнок": {
+  "Мелкая": {
     folder: "photos/kitty",
     files: ["k1.jpg","k2.jpg","k3.jpg","k4.jpg","k5.jpg","k6.jpg","k7.jpg","k8.jpg","k9.jpg","k10.jpg","k11.jpg","k12.jpg"]
   },
@@ -23,7 +23,7 @@ const photoAlbums = {
     files: ["p1.jpg","p2.jpg","p3.jpg","p4.jpg","p5.jpg","p6.jpg","p7.jpg"]
   },
 
-  "Террористка": {
+  "Коридорный террорист": {
     folder: "photos/terrorist",
     files: ["t1.jpg","t2.jpg","t3.jpg","t4.jpg","t5.jpg","t6.jpg","t7.jpg","t8.jpg","t9.jpg","t10.jpg","t11.jpg","t12.jpg","t13.jpg","t14.jpg","t15.jpg","t16.jpg","t17.jpg","t18.jpg","t20.jpg"]
   }
@@ -34,17 +34,17 @@ const photoAlbums = {
 // --------------------
 
 const videoAlbums = {
-  "Голодная": {
+  "Голодаю я": {
     folder: "videos/hungry",
     files: Array.from({length: 17}, (_,i)=>`h${i+1}.mp4`)
   },
 
-  "Куклачёва": {
+  "Белла Куклачёва": {
     folder: "videos/kuklacheva",
     files: ["k1.mp4","k2.mp4","k3.mp4","k4.mp4"]
   },
 
-  "Лежит": {
+  "Валяюсь": {
     folder: "videos/lie",
     files: Array.from({length: 26}, (_,i)=>`l${i+1}.mp4`)
   }
