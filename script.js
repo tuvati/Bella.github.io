@@ -1,10 +1,15 @@
 const photoAlbums = {
+
   "Подружки": {
+    id: "album-girlfriends",
     folder: "photos/girlfriends",
-    files: ["g1.jpg","g2.jpg","g3.jpg","g4.jpg","g5.jpg"]
+    files: [
+      "g1.jpg","g2.jpg","g3.jpg","g4.jpg","g5.jpg"
+    ]
   },
 
-  "Котёнок": {
+  "Мелкая": {
+    id: "album-kitty",
     folder: "photos/kitty",
     files: [
       "k1.jpg","k2.jpg","k3.jpg","k4.jpg",
@@ -14,11 +19,15 @@ const photoAlbums = {
   },
 
   "Сурикат": {
+    id: "album-meerkat",
     folder: "photos/meerkat",
-    files: ["m1.jpg","m2.jpg","m3.jpg"]
+    files: [
+      "m1.jpg","m2.jpg","m3.jpg"
+    ]
   },
 
   "Игрушки": {
+    id: "album-plaything",
     folder: "photos/plaything",
     files: [
       "p1.jpg","p2.jpg","p3.jpg","p4.jpg",
@@ -27,6 +36,7 @@ const photoAlbums = {
   },
 
   "Террористка": {
+    id: "album-terrorist",
     folder: "photos/terrorist",
     files: [
       "t1.jpg","t2.jpg","t3.jpg","t4.jpg",
@@ -39,7 +49,9 @@ const photoAlbums = {
 };
 
 const videoAlbums = {
-  "Голодная": {
+
+  "Голодаю я": {
+    id: "album-hungry",
     folder: "videos/hungry",
     files: [
       "h1.mp4","h2.mp4","h3.mp4","h4.mp4",
@@ -50,14 +62,16 @@ const videoAlbums = {
     ]
   },
 
-  "Куклачёва": {
+  "Белла Куклачёва": {
+    id: "album-kuklacheva",
     folder: "videos/kuklacheva",
     files: [
       "k1.mp4","k2.mp4","k3.mp4","k4.mp4"
     ]
   },
 
-  "Лежит": {
+  "Валяемся": {
+    id: "album-lie",
     folder: "videos/lie",
     files: [
       "l1.mp4","l2.mp4","l3.mp4","l4.mp4",
@@ -78,8 +92,15 @@ for (const albumName in photoAlbums) {
 
   const album = photoAlbums[albumName];
 
+  const imageList = album.files.map(
+    file => `${album.folder}/${file}`
+  );
+
   const section = document.createElement("div");
+
   section.className = "album";
+
+  section.id = album.id;
 
   section.innerHTML = `
     <h3>${albumName}</h3>
@@ -88,14 +109,16 @@ for (const albumName in photoAlbums) {
 
   const gallery = section.querySelector(".gallery");
 
-  album.files.forEach(file => {
+  imageList.forEach((src, index) => {
 
     const img = document.createElement("img");
 
-    img.src = `${album.folder}/${file}`;
+    img.src = src;
+
+    img.loading = "lazy";
 
     img.addEventListener("click", () => {
-      openLightbox(img.src);
+      openLightbox(imageList, index);
     });
 
     gallery.appendChild(img);
@@ -109,7 +132,10 @@ for (const albumName in videoAlbums) {
   const album = videoAlbums[albumName];
 
   const section = document.createElement("div");
+
   section.className = "album";
+
+  section.id = album.id;
 
   section.innerHTML = `
     <h3>${albumName}</h3>
@@ -123,6 +149,7 @@ for (const albumName in videoAlbums) {
     const video = document.createElement("video");
 
     video.controls = true;
+
     video.preload = "metadata";
 
     video.src = `${album.folder}/${file}`;
@@ -133,19 +160,104 @@ for (const albumName in videoAlbums) {
   videosContainer.appendChild(section);
 }
 
-function openLightbox(src) {
+let currentImages = [];
+
+let currentIndex = 0;
+
+function openLightbox(images, index) {
+
+  currentImages = images;
+
+  currentIndex = index;
+
+  renderLightbox();
+}
+
+function renderLightbox() {
+
+  const old = document.querySelector(".lightbox");
+
+  if (old) old.remove();
 
   const lightbox = document.createElement("div");
 
   lightbox.className = "lightbox";
 
   lightbox.innerHTML = `
-    <img src="${src}">
+    <button class="nav prev">←</button>
+
+    <img src="${currentImages[currentIndex]}">
+
+    <button class="nav next">→</button>
   `;
+
+  document.body.appendChild(lightbox);
+
+  lightbox
+    .querySelector(".prev")
+    .addEventListener("click", (e) => {
+
+      e.stopPropagation();
+
+      currentIndex--;
+
+      if (currentIndex < 0) {
+        currentIndex = currentImages.length - 1;
+      }
+
+      renderLightbox();
+    });
+
+  lightbox
+    .querySelector(".next")
+    .addEventListener("click", (e) => {
+
+      e.stopPropagation();
+
+      currentIndex++;
+
+      if (currentIndex >= currentImages.length) {
+        currentIndex = 0;
+      }
+
+      renderLightbox();
+    });
 
   lightbox.addEventListener("click", () => {
     lightbox.remove();
   });
-
-  document.body.appendChild(lightbox);
 }
+
+document.addEventListener("keydown", (e) => {
+
+  if (!document.querySelector(".lightbox")) return;
+
+  if (e.key === "ArrowRight") {
+
+    currentIndex++;
+
+    if (currentIndex >= currentImages.length) {
+      currentIndex = 0;
+    }
+
+    renderLightbox();
+  }
+
+  if (e.key === "ArrowLeft") {
+
+    currentIndex--;
+
+    if (currentIndex < 0) {
+      currentIndex = currentImages.length - 1;
+    }
+
+    renderLightbox();
+  }
+
+  if (e.key === "Escape") {
+
+    document
+      .querySelector(".lightbox")
+      ?.remove();
+  }
+});
